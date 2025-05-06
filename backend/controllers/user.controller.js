@@ -74,7 +74,15 @@ const login = async (req, res) =>{
     }
 }
 
+const checkAuth = (req, res) => {
+    if (req.user) {
+      res.status(200).json({ user: req.user });
+    } else {
+      res.status(401).json({ message: 'Not authenticated' });
+    }
+};
 export {
     signup,
-    login
+    login,
+    checkAuth
 }

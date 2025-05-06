@@ -29,7 +29,11 @@ const taskSchema = new mongoose.Schema({
   },
   completedAt: {
     type: Date,
-  }
+  },
+  dueDate: { 
+    type: Date,
+    required: false,  
+  },
 });
 
 const Task = mongoose.model('Task', taskSchema);
