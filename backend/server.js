@@ -21,7 +21,9 @@ app.use('/user-project',path)
 
 app.use('/user-task',way)
 
-
+app.get('/',(req,res)=>{
+    res.send("Hello wolrd ho gaya na bhai ")
+})
 
 const PORT=process.env.PORT || 2000
 app.listen(PORT,()=>{
