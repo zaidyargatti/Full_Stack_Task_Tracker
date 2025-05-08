@@ -11,6 +11,7 @@ function Signup() {
     country: ''
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // ← Add loading state
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
 
@@ -23,6 +24,7 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // ← Start loading
     try {
       const res = await axios.post('/user/signup', form);
       const { user: registeredUser, token } = res.data;
@@ -35,6 +37,8 @@ function Signup() {
     } catch (err) {
       console.error("Signup error:", err);
       setError(err.response?.data?.message || 'Signup failed');
+    } finally {
+      setLoading(false); // ← Stop loading
     }
   };
 
@@ -90,9 +94,33 @@ function Signup() {
           </div>
           <button
             type="submit"
-            className="w-full bg-black text-white py-2 rounded hover:bg-white hover:text-black hover:border hover:border-black transition"
+            disabled={loading}
+            className="w-full bg-black text-white py-2 rounded hover:bg-white hover:text-black hover:border hover:border-black transition disabled:opacity-50 flex items-center justify-center"
           >
-            Sign Up
+            {loading ? (
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                />
+              </svg>
+            ) : (
+              'Sign Up'
+            )}
           </button>
         </form>
         <p className="text-sm text-center mt-4">
