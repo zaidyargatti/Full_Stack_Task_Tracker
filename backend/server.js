@@ -16,17 +16,8 @@ const allowed = [
     "https://full-stack-task-tracker-cf5qk0w99-9928zaid-gmailcoms-projects.vercel.app",
     "http://localhost:5173"
   ];
-  app.use(cors({
-    origin: function (origin, callback) {
-      if (!origin || allowed.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('CORS Not Allowed'));
-      }
-    },
-    credentials: true
-  }));
-  
+  app.use(cors({ origin: '*', credentials: true }));
+
 app.use(express.json())
 
 app.options('*', cors()); // Allow preflight across all routes
