@@ -8,7 +8,7 @@ const ProjectCard = ({ title, projectId, onClick, onDelete }) => {
   const handleDelete = async () => {
     try {
       await axios.delete(`/user-project/delete-project/${projectId}`);
-      onDelete(projectId); // Call a parent function to update UI
+      onDelete(projectId); 
     } catch (err) {
       console.error("Error deleting project:", err);
     }

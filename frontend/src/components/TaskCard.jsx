@@ -9,12 +9,13 @@ const TaskCard = ({
   description,
   initialStatus,
   createdAt,
-  completedAt,
+  completedAt: initialCompletedAt,
   onDelete,
 }) => {
   const [status, setStatus] = useState(initialStatus);
   const [showOptions, setShowOptions] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [completedAt, setCompletedAt] = useState(initialCompletedAt);
 
   const [editedTitle, setEditedTitle] = useState(title);
   const [editedDescription, setEditedDescription] = useState(description);
@@ -22,12 +23,13 @@ const TaskCard = ({
 
   const handleStatusChange = async (e) => {
     const newStatus = e.target.value;
-    setStatus(newStatus);
     try {
       const res = await axios.put(`/user-task/task-status/${taskId}`, {
         status: newStatus,
       });
-      setStatus(res.data.task.status);
+      const updatedTask = res.data.task;
+      setStatus(updatedTask.status);
+      setCompletedAt(updatedTask.completedAt);
     } catch (error) {
       console.error("Error updating task status:", error);
     }
@@ -66,7 +68,7 @@ const TaskCard = ({
   };
 
   return (
-    <div className="border border-black rounded p-4 hover:bg-gray-100 transition flex justify-between items-start gap-4 flex-wrap md:flex-nowrap relative">
+    <div className="border border-black rounded p-4 hover:bg-gray-100 transition flex flex-col md:flex-row justify-between gap-4 relative">
       {/* Left Side */}
       <div className="flex-1">
         {isEditing ? (
@@ -108,13 +110,20 @@ const TaskCard = ({
           <>
             <h3 className="text-lg font-medium">{editedTitle}</h3>
             <p className="text-sm text-gray-600">Due: {formatDate(editedDueDate)}</p>
-            {editedDescription && <p className="text-sm text-gray-700 mt-1">{editedDescription}</p>}
+            {editedDescription && (
+              <p className="text-sm text-gray-700 mt-1">{editedDescription}</p>
+            )}
+            {status === 'Done' && completedAt && (
+              <p className="text-sm text-black mt-1 font-medium">
+                ✅ Completed: {formatDate(completedAt)}
+              </p>
+            )}
           </>
         )}
       </div>
-
+  
       {/* Right Side */}
-      <div className="flex flex-col items-start min-w-[180px] text-sm gap-2">
+      <div className="flex flex-col items-start text-sm gap-2 min-w-[180px]">
         <div>
           <label className="block text-sm font-medium mb-1">Status:</label>
           <select
@@ -129,12 +138,11 @@ const TaskCard = ({
         </div>
         <div className="text-xs text-gray-500">
           <p>Created At: {formatDate(createdAt)}</p>
-          {status === 'Done' && completedAt && <p>Completed: {formatDate(completedAt)}</p>}
         </div>
       </div>
-
+  
       {/* 3-dot Menu */}
-      <div className="relative">
+      <div className="absolute top-4 right-4">
         <button onClick={() => setShowOptions(!showOptions)} className="text-gray-600 hover:text-black">
           <FiMoreHorizontal />
         </button>
@@ -160,6 +168,7 @@ const TaskCard = ({
       </div>
     </div>
   );
+  
 };
 
 export default TaskCard;
