@@ -1,31 +1,46 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "../utils/Axios"; // use the new instance
-import { useAuth } from "../context/AuthContext";
+import { useState } from 'react';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
+import axios from '../utils/Axios';
+import { useAuth } from '../context/AuthContext';
 
-const SignupPage = () => {
-  const [formData, setFormData] = useState({ name: "", email: "", password: "", country: "" });
-  const [error, setError] = useState("");
+function Signup() {
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    country: ''
+  });
+  const [error, setError] = useState('');
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
-  const { login } = useAuth();
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  if (user) return <Navigate to="/dashboard" />;
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setError('');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     try {
-      const res = await axios.post("/user/signup", formData);
-      const { CreatingUser, token } = res.data;
-      login(CreatingUser, token); // update context
-      navigate("/home"); 
+      const res = await axios.post('/user/signup', form);
+      const { user: registeredUser, token } = res.data;
+
+      localStorage.setItem('token', token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      setUser(registeredUser);
+
+      navigate('/home', { replace: true });
     } catch (err) {
-      setError(err.response?.data?.message || "Signup failed");
+      console.error("Signup error:", err);
+      setError(err.response?.data?.message || 'Signup failed');
     }
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-white text-black px-4">
-      <div className="w-full max-w-md  p-8 rounded-lg shadow-lg">
+      <div className="w-full max-w-md p-8 rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold mb-6 text-center">Create an Account</h2>
         {error && <p className="text-red-600 text-sm text-center mb-2">{error}</p>}
         <form className="space-y-4" onSubmit={handleSubmit}>
@@ -35,7 +50,7 @@ const SignupPage = () => {
               name="name"
               type="text"
               className="w-full px-4 py-2 border rounded focus:outline-none"
-              value={formData.name}
+              value={form.name}
               onChange={handleChange}
               required
             />
@@ -46,7 +61,7 @@ const SignupPage = () => {
               name="email"
               type="email"
               className="w-full px-4 py-2 border rounded focus:outline-none"
-              value={formData.email}
+              value={form.email}
               onChange={handleChange}
               required
             />
@@ -57,7 +72,7 @@ const SignupPage = () => {
               name="password"
               type="password"
               className="w-full px-4 py-2 border rounded focus:outline-none"
-              value={formData.password}
+              value={form.password}
               onChange={handleChange}
               required
             />
@@ -68,13 +83,12 @@ const SignupPage = () => {
               name="country"
               type="text"
               className="w-full px-4 py-2 border rounded focus:outline-none"
-              value={formData.country}
+              value={form.country}
               onChange={handleChange}
               required
             />
           </div>
           <button
-          
             type="submit"
             className="w-full bg-black text-white py-2 rounded hover:bg-white hover:text-black hover:border hover:border-black transition"
           >
@@ -82,7 +96,7 @@ const SignupPage = () => {
           </button>
         </form>
         <p className="text-sm text-center mt-4">
-          Already have an account?{" "}
+          Already have an account?{' '}
           <Link to="/login" className="text-black underline hover:font-medium">
             Login
           </Link>
@@ -90,6 +104,6 @@ const SignupPage = () => {
       </div>
     </div>
   );
-};
+}
 
-export default SignupPage;
+export default Signup;
