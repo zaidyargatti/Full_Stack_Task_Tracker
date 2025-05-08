@@ -10,8 +10,13 @@ DB_connect()
 
 dotenv.config()
 const app=express()
-
-app.use(cors())
+const allowed=["https://full-stack-task-tracker.vercel.app",
+    "https://full-stack-task-tracker-git-main-9928zaid-gmailcoms-projects.vercel.app",
+     "https://full-stack-task-tracker-cf5qk0w99-9928zaid-gmailcoms-projects.vercel.app"]
+app.use(cors({
+    origin:allowed,
+    credentials:true
+}))
 app.use(express.json())
 
 
