@@ -15,9 +15,11 @@ const Nav = () => {
 
   return (
     <header className="flex justify-between items-center p-6  text-black">
+      <Link to="/home">
       <span className="text-2xl font-bold">
         {user?.name || "user"}'s Tracker
       </span>
+      </Link>
       <nav className="flex items-center space-x-4">
         <Link
           to="/dashboard"
