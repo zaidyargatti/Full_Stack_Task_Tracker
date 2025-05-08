@@ -9,7 +9,7 @@ const Create_Task = async (req, res) =>{
             description,
             project: projectId,
             user: req.user._id,
-            dueDate: new Date()
+            dueDate: new Date(dueDate)
         })
 
         res.status(200)

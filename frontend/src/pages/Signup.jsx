@@ -25,7 +25,7 @@ const SignupPage = () => {
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-white text-black px-4">
-      <div className="w-full max-w-md border p-8 rounded-lg shadow">
+      <div className="w-full max-w-md  p-8 rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold mb-6 text-center">Create an Account</h2>
         {error && <p className="text-red-600 text-sm text-center mb-2">{error}</p>}
         <form className="space-y-4" onSubmit={handleSubmit}>

@@ -1,5 +1,5 @@
 import Project from "../models/project.model.js";
-
+import Task from "../models/task.model.js";
 
 const Create_Project = async (req, res) =>{
     try {
@@ -49,34 +49,23 @@ const Get_User_Projects = async (req, res) =>{
             });
         }
     }
-    
-    const Delete_Project = async (req, res) =>{
-        try {
-            const {id}= req.params
-        const project = await Project.findOneAndDelete({
-            _id:id,
-            user:req.user._id
-        })
-        
-        if(!project){
-            return res.status(404).
-            json({
-                message: 'Project not found or unauthorized'
-                 });
-        }
-        res.status(200)
-        .json({ 
-            message: 'Project deleted'
-         });
-        } catch (error) {
-        res.status(500)
-        .json({
-             message: 'Failed to delete project', 
-             error: error.message 
-            });
-        
+   
+const Delete_Project = async (req, res) => {
+    try {
+      const projectId = req.params.id;
+  
+      const project = await Project.findById(projectId);
+      if (!project) {
+        return res.status(404).json({ message: "Project not found" });
+      }
+      await Task.deleteMany({ projectId });
+      await Project.findByIdAndDelete(projectId);
+  
+      res.status(200).json({ message: "Project and related tasks deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Error deleting project", error: error.message });
     }
-}
+  };
 
 const Get_Single_Project = async (req, res) => {
     try {

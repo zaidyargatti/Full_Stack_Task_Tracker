@@ -1,27 +1,32 @@
 import { useAuth } from "../context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { HiOutlineViewGrid } from "react-icons/hi"
+
 
 const Nav = () => {
   const { user, logout } = useAuth(); 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout(); 
-    navigate('/login')
+    navigate('/');
   };
 
   return (
-    <header className="flex justify-between items-center p-6 bg-white text-black">
+    <header className="flex justify-between items-center p-6  text-black">
       <span className="text-2xl font-bold">
-        {user?.name || "user"}
+        {user?.name || "user"}'s Tracker
       </span>
-      <nav className="flex items-center space-x-4"> 
-        <Link to="/dashboard" className="px-3 py-1 border border-black rounded hover:bg-black hover:text-white">
-          Dashboard
+      <nav className="flex items-center space-x-4">
+        <Link
+          to="/dashboard"
+          className="text-3xl text-black hover:text-gray-700"
+          title="Dashboard"
+        >
+           <HiOutlineViewGrid />
         </Link>
-        
+
         <button
           onClick={handleLogout}
           className="flex items-center gap-1 text-gray-700 hover:text-red-600"

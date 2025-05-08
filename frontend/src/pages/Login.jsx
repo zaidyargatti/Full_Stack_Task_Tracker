@@ -6,10 +6,10 @@ import { useAuth } from '../context/AuthContext';
 function LoginPage() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
-  const { user, setUser } = useAuth(); // ✅ get user and setUser
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
 
-  if (user) return <Navigate to="/home" />; // ✅ correct redirect if already logged in
+  if (user) return <Navigate to="/home" />;
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -25,14 +25,14 @@ function LoginPage() {
       setUser(res.data.user);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid email or password');
+      setError( 'Invalid email or password');
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded shadow-md">
-        <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
+    <div className="min-h-screen flex items-center justify-center bg-white text-black px-4">
+      <div className="w-full max-w-md  p-8 rounded-lg shadow-lg ">
+        <h2 className="text-3xl font-bold mb-6 text-center">Login to TaskTracker</h2>
 
         {error && (
           <div className="bg-red-100 text-red-700 text-sm p-3 mb-4 rounded border border-red-300">
@@ -41,23 +41,27 @@ function LoginPage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-         < button
+          <div>
+            <label className="block text-sm font-medium mb-1">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded focus:outline-none "
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded focus:outline-none "
+            />
+          </div>
+          <button
             type="submit"
             className="w-full bg-black text-white py-2 rounded hover:bg-white hover:text-black hover:border hover:border-black transition"
           >
@@ -65,10 +69,10 @@ function LoginPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm mt-4">
+        <p className="text-sm text-center mt-4">
           Don’t have an account?{' '}
-          <Link to="/signup" className="text-blue-600 hover:underline">
-            Signup
+          <Link to="/signup" className="text-black underline hover:font-medium">
+            Sign Up
           </Link>
         </p>
       </div>
