@@ -6,39 +6,40 @@ const generateToken =(id)=>{
        expiresIn:'30d'
     })
    }
-
-const signup = async (req, res) =>{
+   
+   const signup = async (req, res) => {
     try {
-        const {name,email,password,country}=req.body
-
-        const existUser= await User.findOne({email})
-        if(existUser){
-        return res.status(400)
-         .json({
-            message:"Email already exist "
-         })
-        }
-
-        const CreatingUser = await User.create({
-            name,
-            email,
-            password,
-            country
-        })
-        const token = generateToken(CreatingUser._id)
-        res.status(200)
-        .json({
-            CreatingUser,
-            token
-        })
+      const { name, email, password, country } = req.body;
+  
+      const existUser = await User.findOne({ email });
+      if (existUser) {
+        return res.status(400).json({
+          message: "Email already exists"
+        });
+      }
+  
+      const CreatingUser = await User.create({
+        name,
+        email,
+        password,
+        country
+      });
+  
+      const token = generateToken(CreatingUser._id);
+  
+      return res.status(201).json({
+        message: "User registered successfully",
+        user: CreatingUser,
+        token
+      });
     } catch (error) {
-        res.status(500)
-        .json({
-            message:"Internal server error",
-            error:error.message
-        })
+      return res.status(500).json({
+        message: "Internal server error",
+        error: error.message
+      });
     }
-}
+  };
+  
 
 const login = async (req, res) =>{
     try {
