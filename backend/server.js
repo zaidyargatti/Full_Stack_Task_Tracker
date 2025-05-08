@@ -12,7 +12,8 @@ dotenv.config()
 const app=express()
 const allowed=["https://full-stack-task-tracker.vercel.app",
     "https://full-stack-task-tracker-git-main-9928zaid-gmailcoms-projects.vercel.app",
-     "https://full-stack-task-tracker-cf5qk0w99-9928zaid-gmailcoms-projects.vercel.app"]
+     "https://full-stack-task-tracker-cf5qk0w99-9928zaid-gmailcoms-projects.vercel.app",
+    " http://localhost:5173/"]
 app.use(cors({
     origin:allowed,
     credentials:true
