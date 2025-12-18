@@ -19,7 +19,7 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // start loading spinner
+    setLoading(true); 
     try {
       const res = await axios.post('/user/login', form);
       localStorage.setItem('token', res.data.token);
@@ -27,9 +27,10 @@ function LoginPage() {
       setUser(res.data.user);
       navigate('/');
     } catch (err) {
-      setError('Invalid email or password');
+      console.log(err)
+      setError(res.data.message);
     } finally {
-      setLoading(false); // stop loading spinner
+      setLoading(false); 
     }
   };
 
